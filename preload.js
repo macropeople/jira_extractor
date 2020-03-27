@@ -1,12 +1,42 @@
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 // let axios = require('axios').default;
-
-let jiraTableData = [];
+ 
+window.jiraTableData = [];
 
 window.addEventListener('DOMContentLoaded', () => {
   getJiras();
+  initSasJs();
 })
+
+function initSasJs() {
+  // console.log(`V: ${VERSION_NUMBER}`);
+  sasJs = new SASjs.default({
+      serverUrl: "http://sas.analytium.co.uk:7980",
+      appLoc: "/Public/cab",
+      serverType: "SAS9",
+      pathSAS9: "/SASStoredProcess/do",
+      debug: true
+  });
+  
+  login();
+  // loadStartupData();
+}
+
+function login() {
+  // const username = (document.querySelector("#username") as HTMLInputElement).value;
+  // const password = (document.querySelector("#password") as HTMLInputElement).value;
+  const username = "";
+  const password = "";
+  sasJs.logIn(username, password).then(response => {
+      if (response.login === false) {
+          console.log("ERROR Login")
+      } else {
+          // loadStartupData();
+          console.log("Logged in successfully");
+      }
+  });
+}
 
 
 async function makeRequest(jiraUrl) {
@@ -207,7 +237,8 @@ function createJiraRows(jiras) {
   });
 
   // document.getElementById('sendJiraTickets').style.display = "";
-  document.querySelector("#jiraLoaded").style = "";
+  document.querySelector('#jiraLoaded').style = "";
+  document.querySelector('#sendJiraTickets').style = "";
   let loadingJiraEl = document.querySelector('#loadingJira');
   loadingJiraEl.style.display = "none";
   loadingJiraEl.classList.remove('d-inline-flex');

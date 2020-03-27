@@ -5,6 +5,7 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <script src="https://cdn.jsdelivr.net/npm/sasjs/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="./main.css">
@@ -20,6 +21,14 @@
     </div>
 
     <hr />
+
+    <div id="sendJiraTickets" class="row no-gutters mt-3 mb-3" style="display: none;">
+      <div class="col-12 container text-center">
+          <div class="btn-group btn-group-sm" role="group">
+              <button class="btn btn-secondary" id="btn-show-jiras" onclick="refreshJira()">Send Jira Tickets</button>
+          </div>
+      </div>
+  </div>
 
     <div id="loadingJira" class="d-inline-flex justify-content-center align-items-center w-100 mt-3" style="display: none;">
       <span>Fetching jira</span>

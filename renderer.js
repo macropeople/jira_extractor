@@ -5,17 +5,20 @@
 // selectively enable features needed in the rendering
 // process.
 
-// window.addEventListener('DOMContentLoaded', () => {
-//     getJiras();
-// });
-
-// function getJiras() {
-//     const jiraUrl = "https://macropeople.atlassian.net/rest/api/2/search?projet=MC&maxResults=10&startAt=0";
-//     axios.get(jiraUrl, {
-//       headers: {
-//         "Authorization": "Basic bWloYWpsby5tZWRqZWRvdmljQG91dGxvb2suY29tOlg4ZUZjTml5RnhicnNqTzJZMVVGMjc3RQ=="
-//       }
-//     }).then(res => {
-//       console.log(res);
-//     })
-// }
+function refreshJira() {
+    let slicedJiras = jiraTableData.slice(0, 50);
+  
+    // let data = {JIRA_TICKETS: slicedJiras};
+    let data = {JIRA_TICKETS: jiraTableData};
+    console.log(data
+        );
+    sasJs.request("edit/refreshjira", data).then(res => {
+        console.log(res);
+  
+        alert("Jira Tickets Added");
+    }, err => {
+        console.log(err);
+  
+        alert("SAS Error:\n" + JSON.stringify(err));
+    });
+  }
