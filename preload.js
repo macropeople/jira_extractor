@@ -100,7 +100,7 @@ async function getJiras() {
           if (res.issues.length > 0) {
               jiras.push(...res.issues);
 
-              document.getElementById('issuesFetched').innerText = jiras.length.toString() + " issues...";
+              document.getElementById('issuesFetched').innerText = jiras.length.toString() + " loaded";
 
               currentIndex += 100;
           } else {
@@ -140,8 +140,8 @@ function createJiraTableHeader() {
   const row = document.createElement("tr");
   headerRow.appendChild(row);
   const columnNames = [
-      { text: "Project", size: 1, class: "text-center align-center custom-th" }, //for the edit button
-      { text: "ID", size: 1, class: "text-center align-center custom-th" },
+      { text: "Project", size: 1, class: "align-center custom-th" }, //for the edit button
+      { text: "ID", size: 1, class: "align-center custom-th" },
       { text: "Type", size: 1, class: "align-center custom-th" },
       { text: "Fix Version", size: 1, class: "align-center custom-th" },
       { text: "Created DT.", size: 2, class: "align-center custom-th" },
