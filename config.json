@@ -1,0 +1,6 @@
+{
+    "serverUrl": "http://sas.analytium.co.uk:7980",
+    "appLoc": "/Public/cab",
+    "jiraBaseUrl": "https://macropeople.atlassian.net",
+    "jiraAccessToken": "bWloYWpsby5tZWRqZWRvdmljQG91dGxvb2suY29tOlg4ZUZjTml5RnhicnNqTzJZMVVGMjc3RQ=="
+}
