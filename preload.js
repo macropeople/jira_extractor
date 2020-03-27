@@ -1,10 +1,10 @@
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 let axios = require('axios').default;
+let appConfig = require('./config.json');
  
 window.jiraTableData = [];
-let jiraUrl = "";
-let appLoc = "";
+let JQLstring = "";
 let username = "";
 let password = "";
 
@@ -24,12 +24,12 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 function confirmConfig() {
-  appLoc = document.querySelector('#appLoc').value;
-  jiraUrl = document.querySelector('#jiraUrl').value;
+  // appLoc = document.querySelector('#appLoc').value;
+  JQLstring = document.querySelector('#jqlString').value;
   username = document.querySelector("#userEmail").value;
   password = document.querySelector("#userPassword").value;
 
-  if (appLoc.length > 0 && jiraUrl.length > 0 && username.length > 0 && password.length > 0) {
+  if (JQLstring.length > 0 && username.length > 0 && password.length > 0) {
     let appSettings = document.querySelector('#appSettings');
     appSettings.style.display = "none";
     appSettings.classList.remove('d-flex');
@@ -45,8 +45,8 @@ function confirmConfig() {
 function initSasJs() {
   // console.log(`V: ${VERSION_NUMBER}`);
   sasJs = new SASjs.default({
-      serverUrl: "http://sas.analytium.co.uk:7980",
-      appLoc: appLoc,
+      serverUrl: appConfig.serverUrl,
+      appLoc: appConfig.appLoc,
       serverType: "SAS9",
       pathSAS9: "/SASStoredProcess/do",
       debug: true
@@ -74,7 +74,7 @@ async function makeRequest(apiJiraUrl) {
   return new Promise((resolve, reject) => {
     axios.get(apiJiraUrl, {
       headers: {
-        "Authorization": "Basic bWloYWpsby5tZWRqZWRvdmljQG91dGxvb2suY29tOlg4ZUZjTml5RnhicnNqTzJZMVVGMjc3RQ=="
+        "Authorization": `Basic ${appConfig.jiraAccessToken}`
       }
     }).then(res => {
       resolve(res.data);
@@ -92,7 +92,7 @@ async function getJiras() {
   let jiras = [];
 
   while (true) {
-      const apiJiraUrl = `${jiraUrl}/rest/api/2/search?projet=MC&maxResults=100&startAt=${currentIndex}`;
+      const apiJiraUrl = `${appConfig.jiraBaseUrl}/rest/api/2/${JQLstring}&maxResults=100&startAt=${currentIndex}`;
 
       let res = await makeRequest(apiJiraUrl);
 
