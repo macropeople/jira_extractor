@@ -7,8 +7,22 @@
     color: #007bff;
 }
 
-#jira-table thead th {
+button {
+    max-width: initial !important;
+}
+
+tbody tr td {
+    white-space: pre-wrap;
+    word-break: break-all;
+    min-width: 75px;
+}
+
+/* #jira-table thead th {
     background-color: #007bff;
+} */
+
+#jira-container {
+    overflow: auto;
 }
 
 thead,
@@ -25,6 +39,7 @@ th {
 }
 
 table {
+    min-width: 1000px;
     border: 1px solid #d2d2d2;
 }
 
@@ -32,4 +47,8 @@ tbody {
     display: block;
     height: 400px;
     overflow: auto;
+}
+
+td .badge {
+    margin-bottom: 5px;
 }

@@ -1,19 +1,52 @@
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
-// let axios = require('axios').default;
+let axios = require('axios').default;
  
 window.jiraTableData = [];
+let jiraUrl = "";
+let appLoc = "";
+let username = "";
+let password = "";
 
 window.addEventListener('DOMContentLoaded', () => {
-  getJiras();
-  initSasJs();
+  // getJiras();
+  // initSasJs();
+
+  document.querySelector('#confirmConfig').addEventListener("click", function(event) {
+    event.preventDefault();
+    let success = confirmConfig();
+    
+    if (success) {
+      getJiras();
+      initSasJs();
+    }
+  })
 })
+
+function confirmConfig() {
+  appLoc = document.querySelector('#appLoc').value;
+  jiraUrl = document.querySelector('#jiraUrl').value;
+  username = document.querySelector("#userEmail").value;
+  password = document.querySelector("#userPassword").value;
+
+  if (appLoc.length > 0 && jiraUrl.length > 0 && username.length > 0 && password.length > 0) {
+    let appSettings = document.querySelector('#appSettings');
+    appSettings.style.display = "none";
+    appSettings.classList.remove('d-flex');
+
+    return true;
+  } else {
+    alert("You can't leave blank fields");
+  }
+
+  return false;
+}
 
 function initSasJs() {
   // console.log(`V: ${VERSION_NUMBER}`);
   sasJs = new SASjs.default({
       serverUrl: "http://sas.analytium.co.uk:7980",
-      appLoc: "/Public/cab",
+      appLoc: appLoc,
       serverType: "SAS9",
       pathSAS9: "/SASStoredProcess/do",
       debug: true
@@ -24,10 +57,8 @@ function initSasJs() {
 }
 
 function login() {
-  // const username = (document.querySelector("#username") as HTMLInputElement).value;
-  // const password = (document.querySelector("#password") as HTMLInputElement).value;
-  const username = "";
-  const password = "";
+  // const username = "";
+  // const password = "";
   sasJs.logIn(username, password).then(response => {
       if (response.login === false) {
           console.log("ERROR Login")
@@ -39,9 +70,9 @@ function login() {
 }
 
 
-async function makeRequest(jiraUrl) {
+async function makeRequest(apiJiraUrl) {
   return new Promise((resolve, reject) => {
-    axios.get(jiraUrl, {
+    axios.get(apiJiraUrl, {
       headers: {
         "Authorization": "Basic bWloYWpsby5tZWRqZWRvdmljQG91dGxvb2suY29tOlg4ZUZjTml5RnhicnNqTzJZMVVGMjc3RQ=="
       }
@@ -55,13 +86,15 @@ async function makeRequest(jiraUrl) {
 }
 
 async function getJiras() {
+  let loadingJiraEl = document.querySelector('#loadingJira').style = "";
+
   let currentIndex = 0;
   let jiras = [];
 
   while (true) {
-      const jiraUrl = `https://macropeople.atlassian.net/rest/api/2/search?projet=MC&maxResults=100&startAt=${currentIndex}`;
+      const apiJiraUrl = `${jiraUrl}/rest/api/2/search?projet=MC&maxResults=100&startAt=${currentIndex}`;
 
-      let res = await makeRequest(jiraUrl);
+      let res = await makeRequest(apiJiraUrl);
 
       try {
           if (res.issues.length > 0) {
@@ -83,12 +116,12 @@ async function getJiras() {
 
 function createJiraTable(jiras) {
   let existingTable = document.querySelector("#jira-container");
-  let divRow = document.createElement("div");
-  divRow.className = "row no-gutters";
-  existingTable.appendChild(divRow);
-  let divCol = document.createElement("div");
-  divCol.className = "col-12";
-  divRow.appendChild(divCol);
+  // let divRow = document.createElement("div");
+  // divRow.className = "row no-gutters";
+  // existingTable.appendChild(divRow);
+  // let divCol = document.createElement("div");
+  // divCol.className = "col-12";
+  // divRow.appendChild(divCol);
   let table = document.createElement("table");
   table.id = "jira-table";
   table.className = "table table-fixed";
@@ -99,7 +132,7 @@ function createJiraTable(jiras) {
   let tableBody = document.createElement("tbody");
   table.appendChild(tableBody);
   tableRows.forEach(row => tableBody.appendChild(row));
-  divCol.appendChild(table);
+  existingTable.appendChild(table);
 }
 
 function createJiraTableHeader() {
@@ -174,7 +207,7 @@ function createJiraRows(jiras) {
       priorityCell.innerText = jira.fields.priority.name;
       row.appendChild(priorityCell);
 
-      jiraTableRow['JIRA_LABELS'] = "|none|";
+      jiraTableRow['JIRA_LABELS'] = "";
       let labelsCell = document.createElement("td");
       // labelsCell.className = "col-1";
       // for (status in jira.fields.status) {

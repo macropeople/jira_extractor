@@ -6,8 +6,9 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <script src="https://cdn.jsdelivr.net/npm/sasjs/index.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="./assets/bootstrap.css"> -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/@clr/ui/clr-ui.min.css" /> -->
     <link rel="stylesheet" href="./main.css">
     <title>Jira Extractor</title>
   </head>
@@ -22,6 +23,34 @@
 
     <hr />
 
+    <div id="appSettings" class="w-100 d-flex flex-column align-items-center mt-5">
+      <form style="max-width: 400px; width: 100%">
+        <h5 class="mb-3">Application configuration</h5>
+        <div class="form-group">
+          <label for="jiraUrl">Jira url</label>
+          <input type="text" class="form-control" id="jiraUrl" placeholder="Jira url" value="https://macropeople.atlassian.net">
+        </div>
+        <div class="form-group">
+          <label for="appLoc">App location</label>
+          <input type="text" class="form-control" id="appLoc" placeholder="Sas app location" value="/Public/cab">
+        </div>
+
+        <hr />
+        
+        <h5 class="mb-3">SAS Login</h5>
+
+        <div class="form-group">
+          <label for="userEmail">Email address</label>
+          <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+          <label for="userPassowrd">Password</label>
+          <input type="password" class="form-control" id="userPassword" placeholder="Password">
+        </div>
+        <button type="submit" id="confirmConfig" class="btn btn-primary w-100">Confirm</button>
+      </form>
+    </div>
+
     <div id="sendJiraTickets" class="row no-gutters mt-3 mb-3" style="display: none;">
       <div class="col-12 container text-center">
           <div class="btn-group btn-group-sm" role="group">
@@ -30,7 +59,7 @@
       </div>
   </div>
 
-    <div id="loadingJira" class="d-inline-flex justify-content-center align-items-center w-100 mt-3" style="display: none;">
+    <div id="loadingJira" class="d-inline-flex justify-content-center align-items-center w-100 mt-3" style="visibility: hidden;">
       <span>Fetching jira</span>
       <div class="spinner-border text-primary ml-2" role="status">
           <span class="sr-only">Loading...</span>
@@ -39,7 +68,7 @@
     </div>
 
     <div id="jiraLoaded" class="w-100">
-      <div class="table-responsive px-5" id="jira-container"></div>
+      <div class="px-5" id="jira-container"></div>
 
     </div>
 
